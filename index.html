@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071827">
+<meta name="description" content="HYPERBLOCK gaming portal">
+<title>HYPERBLOCK • Game Hub</title>
+<link rel="stylesheet" href="styles.css">
+<script>
+// Failsafe: runs independently of app.js so the loader can never hang forever.
+window.__hideLoader = function(msg){
+  var l=document.getElementById("loader"); if(!l||l.classList.contains("hidden")) return;
+  var t=document.getElementById("loaderText"); if(msg&&t) t.textContent=msg;
+  setTimeout(function(){ l.classList.add("hidden"); }, msg?1500:0);
+};
+setTimeout(function(){ if(!window.__noobonly1Ready) window.__hideLoader("Taking too long — open the console (F12) for details."); }, 12000);
+</script>
+</head>
+<body>
+<div id="loader" class="loader" aria-live="polite">
+  <div class="loader-logo">HYPER<span>BLOCK</span></div>
+  <div class="loader-ring"></div>
+  <div class="loader-progress"><i id="loaderBar"></i></div>
+  <p id="loaderText">Checking portal files…</p>
+</div>
+
+<header class="topbar">
+  <button class="brand" data-page="home" aria-label="HYPERBLOCK Home">HYPER<span>BLOCK</span></button>
+  <nav class="desktop-nav" aria-label="Main navigation">
+    <button data-page="home">Home</button>
+    <button data-page="games">Games</button>
+    <button data-page="studio">Game Studio</button>
+    <button data-page="tools">Tools</button>
+    <button data-page="settings">Settings</button>
+  </nav>
+  <button id="menuBtn" class="icon-btn" aria-label="Open menu">☰</button>
+</header>
+
+<div id="mobileMenu" class="mobile-menu">
+  <button data-page="home">🏠 Home</button>
+  <button data-page="games">🎮 Games</button>
+  <button data-page="studio">🧩 Game Studio</button>
+  <button data-page="tools">💻 Tools</button>
+  <button data-page="settings">⚙️ Settings</button>
+</div>
+
+<main>
+<section id="home" class="page active">
+  <div class="hero">
+    <div>
+      <p class="eyebrow">YOUR PERSONAL GAME HUB</p>
+      <h1>PLAY. CREATE.<br><span>CUSTOMIZE.</span></h1>
+      <p class="hero-copy">A fast, mobile-friendly gaming portal with a searchable library, favorites, recently played games, game-source hubs, a JavaScript lab, block scripting, a starter 3D scene editor, and deep customization.</p>
+      <div class="hero-actions">
+        <button class="primary" data-page="games">🎮 Browse Games</button>
+        <button class="secondary" data-page="studio">🧩 Open Studio</button>
+      </div>
+      <div class="stats">
+        <div><b id="gameCount">0</b><span>Games / hubs</span></div>
+        <div><b id="categoryCount">0</b><span>Categories</span></div>
+        <div><b>100%</b><span>Mobile ready</span></div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-cube"></div>
+      <div class="status"><i></i> PORTAL ONLINE</div>
+      <small>HYPERBLOCK rebuild</small>
+    </div>
+  </div>
+
+  <div class="section-head"><div><p class="eyebrow">FEATURED</p><h2>Quick Access</h2></div></div>
+  <div id="featuredGrid" class="game-grid compact"></div>
+
+  <div class="section-head"><div><p class="eyebrow">RECENT</p><h2>Recently Played</h2></div></div>
+  <div id="recentGrid" class="game-grid compact"><p class="empty-state">Play a game and it will appear here.</p></div>
+</section>
+
+<section id="games" class="page">
+  <div class="section-head">
+    <div><p class="eyebrow">LIBRARY</p><h2>Game Library</h2></div>
+    <button class="secondary" id="randomGame">🎲 Random</button>
+  </div>
+  <div class="toolbar">
+    <input id="gameSearch" class="search" placeholder="Search games, categories, or sources…" autocomplete="off">
+    <select id="categoryFilter" class="select" aria-label="Filter by category"><option>All</option></select>
+    <button id="favoritesOnly" class="secondary">☆ Favorites</button>
+  </div>
+  <div id="sourceBar" class="chips"></div>
+  <div id="gameGrid" class="game-grid"></div>
+</section>
+
+<section id="studio" class="page">
+  <div class="section-head">
+    <div><p class="eyebrow">CREATE</p><h2>Game Studio</h2></div>
+    <button class="primary" id="runScene">▶ Test Scene</button>
+  </div>
+  <div class="studio-tabs">
+    <button class="tab active" data-studio="blocks">🧩 Blocks</button>
+    <button class="tab" data-studio="scene">🧊 3D Scene</button>
+  </div>
+  <div id="blocksPanel" class="studio-panel active">
+    <div class="block-toolbar">
+      <button data-block="event">🟨 When Game Starts</button>
+      <button data-block="move">🟦 Move</button>
+      <button data-block="rotate">🟪 Rotate</button>
+      <button data-block="wait">🟧 Wait</button>
+      <button data-block="if">🟥 If / Then</button>
+      <button data-block="sound">🟩 Play Sound</button>
+      <button data-block="score">⭐ Change Score</button>
+      <button data-block="repeat">🔁 Repeat</button>
+    </div>
+    <div id="blockCanvas" class="block-canvas"><div class="empty-state">Tap blocks above to build a script.</div></div>
+  </div>
+  <div id="scenePanel" class="studio-panel">
+    <div class="scene-layout">
+      <div id="sceneView" class="scene-view">
+        <div id="sceneCube" class="scene-cube"><span></span></div>
+        <div class="scene-grid"></div>
+      </div>
+      <aside class="inspector">
+        <h3>Object Inspector</h3>
+        <label>Name<input id="objectName" value="Cube"></label>
+        <label>Scale<input id="objectScale" type="range" min=".5" max="2.5" step=".1" value="1"></label>
+        <label>Rotation<input id="objectRotation" type="range" min="0" max="360" value="25"></label>
+        <button class="secondary" id="addCube">＋ Add Cube</button>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="tools" class="page">
+  <div class="section-head">
+    <div><p class="eyebrow">LAB</p><h2>JavaScript Lab</h2></div>
+    <button class="primary" id="runJS">▶ Run Code</button>
+  </div>
+  <p class="muted">This lab runs code locally in your browser. It is for your own experiments.</p>
+  <textarea id="code" class="code" spellcheck="false">const message = "Hello from HYPERBLOCK!";
+console.log(message);
+document.querySelector("#output").textContent = message;</textarea>
+  <pre id="output" class="output">Output will appear here.</pre>
+</section>
+
+<section id="settings" class="page">
+  <div class="section-head"><div><p class="eyebrow">CONTROL CENTER</p><h2>Settings</h2></div></div>
+  <div class="settings-grid">
+    <div class="panel">
+      <h3>Appearance</h3>
+      <label>Accent <input id="accentColor" type="color" value="#16c8e8"></label>
+      <label>Background <input id="backgroundColor" type="color" value="#071827"></label>
+      <label class="switch"><input id="glowToggle" type="checkbox" checked> Glow effects</label>
+      <label class="switch"><input id="motionToggle" type="checkbox" checked> Animations</label>
+    </div>
+    <div class="panel">
+      <h3>Quick Exit</h3>
+      <p class="muted">Save a destination. Pressing Quick Exit navigates this tab to it.</p>
+      <input id="quickExitUrl" class="search" placeholder="https://example.com">
+      <button id="quickExit" class="primary full">⚡ Quick Exit</button>
+    </div>
+    <div class="panel">
+      <h3>Portal Diagnostics</h3>
+      <div id="diagnostics" class="diagnostics"></div>
+      <button id="runDiagnostics" class="secondary full">🔧 Run Diagnostics</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<div id="player" class="player" hidden>
+  <div class="player-bar">
+    <button id="playerBack" class="secondary">← Games</button>
+    <b id="playerTitle"></b>
+    <span class="grow"></span>
+    <button id="playerExternal" class="secondary">↗ New tab</button>
+    <button id="playerFull" class="primary">⛶ Fullscreen</button>
+  </div>
+  <div id="playerStage" class="player-stage">
+    <div id="playerStatus" class="player-status"></div>
+    <iframe id="playerFrame" title="Game" allow="fullscreen; gamepad; autoplay" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-popups"></iframe>
+  </div>
+</div>
+<footer><span>HYPERBLOCK</span> • Game Hub • Built for mobile + desktop</footer>
+<script src="js/app.js" type="module" onerror="window.__hideLoader('Could not load js/app.js — check the file path.')"></script>
+</body>
+</html>
